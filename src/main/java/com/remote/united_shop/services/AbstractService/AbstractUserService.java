@@ -6,7 +6,7 @@ import com.remote.united_shop.data.entities.User;
 
 import java.util.List;
 
-public interface AbstractUserService extends AbstractService<User> {
+public interface AbstractUserService extends AbstractService<User,Long> {
     public void likeNewShop(String ShopName);
     public void dislikeShop(String ShopName);
     public void removeShopFromPreferredShops(String ShopName);

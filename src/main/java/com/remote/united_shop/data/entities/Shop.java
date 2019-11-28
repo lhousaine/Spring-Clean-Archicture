@@ -27,4 +27,6 @@ public class Shop implements Serializable {
     private String logo;
     @Embedded
     private Coordinates coordinates;
+    @Embedded
+    private Address address;
 }

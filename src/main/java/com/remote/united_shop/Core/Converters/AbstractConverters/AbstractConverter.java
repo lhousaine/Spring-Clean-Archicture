@@ -1,4 +1,4 @@
-package com.remote.united_shop.data.dto.Converters;
+package com.remote.united_shop.Core.Converters.AbstractConverters;
 
 import java.text.ParseException;
 

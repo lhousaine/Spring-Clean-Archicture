@@ -8,6 +8,7 @@ class UnitedShopApplicationTests {
 
     @Test
     void contextLoads() {
+
     }
 
 }

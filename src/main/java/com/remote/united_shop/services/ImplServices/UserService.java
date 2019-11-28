@@ -1,14 +1,17 @@
 package com.remote.united_shop.services.ImplServices;
 
 import com.remote.united_shop.data.entities.User;
+import com.remote.united_shop.data.repositories.UserRepository;
 import com.remote.united_shop.services.AbstractService.AbstractUserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
 public class UserService implements AbstractUserService {
-
+    @Autowired
+    private UserRepository userRepository;
     @Override
     public void likeNewShop(String ShopName) {
 
@@ -26,26 +29,27 @@ public class UserService implements AbstractUserService {
 
     @Override
     public List<User> getAll() {
-        return null;
+        return userRepository.findAll();
     }
 
     @Override
-    public User getByIdEntity(String idEntity) {
-        return null;
+    public User getByIdEntity(Long idEntity) {
+        return userRepository.getOne(idEntity);
     }
 
     @Override
     public User createNewEntity(User user) {
-        return null;
+        user=userRepository.save(user);
+        return user;
     }
 
     @Override
-    public void updateEntity(String idEntity, User user) {
+    public void updateEntity(Long idEntity, User user) {
 
     }
 
     @Override
-    public String deleteEntity(String idEntity) {
-        return null;
+    public void deleteEntity(Long idEntity) {
+        userRepository.deleteById(idEntity);
     }
 }

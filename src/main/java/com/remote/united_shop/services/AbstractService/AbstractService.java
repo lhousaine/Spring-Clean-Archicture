@@ -2,10 +2,10 @@ package com.remote.united_shop.services.AbstractService;
 
 import java.util.List;
 
-public interface AbstractService<T> {
+public interface AbstractService<T,ID> {
     public List<T> getAll();
-    public T getByIdEntity(String idEntity);
+    public T getByIdEntity(ID idEntity);
     public T createNewEntity(T t);
-    public void updateEntity(String idEntity,T t);
-    public String deleteEntity(String idEntity);
+    public void updateEntity(ID idEntity,T t);
+    public void deleteEntity(ID idEntity);
 }

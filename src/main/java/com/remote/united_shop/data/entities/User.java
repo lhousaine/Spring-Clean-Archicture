@@ -10,26 +10,26 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Set;
 
 @NoArgsConstructor
 @Getter
+@Setter
 @Entity
 @Table(name = "users")
 public class User implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long userId;
-    @Email
-    @Column(unique = true)
-    private String email;
     @NotNull
     @Size(max =50,min = 3)
     private String firstName;
     @NotNull
     @Size(max =50,min = 3)
     private String lastName;
+    @Email
+    @Column(unique = true)
+    private String email;
     @NotNull
     @Size(min = 8,max=20)
     private String password;
@@ -46,23 +46,4 @@ public class User implements Serializable {
             inverseJoinColumns=@JoinColumn(name="shopName"))
     private Set<Shop> dislikedShops;
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
-
-    public void setLikedShops(Set<Shop> likedShops) {
-        this.likedShops = likedShops;
-    }
-
-    public void setDislikedShops(Set<Shop> dislikedShops) {
-        this.dislikedShops = dislikedShops;
-    }
 }

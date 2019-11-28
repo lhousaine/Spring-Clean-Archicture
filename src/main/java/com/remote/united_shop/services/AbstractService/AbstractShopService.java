@@ -5,7 +5,7 @@ import com.remote.united_shop.data.entities.Shop;
 
 import java.util.List;
 
-public interface AbstractShopService extends AbstractService<Shop>{
+public interface AbstractShopService extends AbstractService<Shop,String>{
     public List<Shop> nearbyShopsToUser(Coordinates coordinates);
     public List<Shop> preferredShopsUser(String username);
 }

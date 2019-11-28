@@ -4,10 +4,12 @@ import com.remote.united_shop.data.entities.Address;
 import com.remote.united_shop.data.entities.Coordinates;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@AllArgsConstructor
+@NoArgsConstructor
 @Getter
+@Setter
 public class UserDto {
     private long userId;
     private String email;
@@ -15,12 +17,4 @@ public class UserDto {
     private String lastName;
     private Coordinates coordinates;
     private Address address;
-
-    public void setCoordinates(Coordinates coordinates) {
-        this.coordinates = coordinates;
-    }
-
-    public void setAddress(Address address) {
-        this.address = address;
-    }
 }

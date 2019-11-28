@@ -1,9 +1,6 @@
 package com.remote.united_shop.data.entities;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Embeddable;
 import javax.validation.constraints.NotNull;
@@ -11,10 +8,11 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Embeddable
 public class Coordinates{
     @NotNull
-   private long latitude;
+   private double latitude;
     @NotNull
-   private long longitude;
+   private double longitude;
 }
