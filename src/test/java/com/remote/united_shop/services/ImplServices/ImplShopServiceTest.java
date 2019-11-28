@@ -1,6 +1,8 @@
 package com.remote.united_shop.services.ImplServices;
 
 
+import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
+import com.remote.united_shop.data.dto.ShopDto;
 import com.remote.united_shop.data.entities.Coordinates;
 import com.remote.united_shop.data.entities.Shop;
 import com.remote.united_shop.data.repositories.ShopRepository;
@@ -28,7 +30,7 @@ public class ImplShopServiceTest {
     }
 
     @Test
-    final void testGetByIdShop(){
+    final void testGetByIdShop() throws NoDataFoundException {
        Shop shop=new Shop();
        shop.setName("shop 1");
        shop.setDescription("shop 1 shop 1");
@@ -36,9 +38,13 @@ public class ImplShopServiceTest {
        shop.setCoordinates(new Coordinates(10,20));
        when(shopRepository.getOne(anyString())).thenReturn(shop);
 
-       Shop sh=shopService.getByIdEntity("lhou");
-       assertNotNull(sh);
-       assertEquals("shop 1",sh.getName());
+       ShopDto sh=shopService.getByIdEntity("lhou");
+        assertThrows(Exception.class,
+                ()->{
+                    assertNotNull(sh);
+                    assertEquals("shop 1",sh.getName());
+                }
+        );
     }
     @Test
     final void testGetUserByEmailPassword(){

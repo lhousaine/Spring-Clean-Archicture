@@ -1,5 +1,9 @@
 package com.remote.united_shop.services.ImplServices;
 
+import com.remote.united_shop.Core.Converters.AbstractConverters.AbstractShopConverter;
+import com.remote.united_shop.Core.Exceptions.FailedToSaveDataException;
+import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
+import com.remote.united_shop.data.dto.ShopDto;
 import com.remote.united_shop.data.entities.Coordinates;
 import com.remote.united_shop.data.entities.Shop;
 import com.remote.united_shop.data.repositories.ShopRepository;
@@ -7,6 +11,7 @@ import com.remote.united_shop.services.AbstractService.AbstractShopService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +19,8 @@ import java.util.Optional;
 public class ShopService implements AbstractShopService {
     @Autowired
     private ShopRepository shopRepository;
+    @Autowired
+    private AbstractShopConverter shopConverter;
     /**+
      *
      * @param coordinates
@@ -21,7 +28,7 @@ public class ShopService implements AbstractShopService {
      */
 
     @Override
-    public List<Shop> nearbyShopsToUser(Coordinates coordinates) {
+    public List<ShopDto> nearbyShopsToUser(Coordinates coordinates) {
         return null;
     }
 
@@ -31,7 +38,7 @@ public class ShopService implements AbstractShopService {
      * @return
      */
     @Override
-    public List<Shop> preferredShopsUser(String username) {
+    public List<ShopDto> preferredShopsUser(String username) {
         return null;
     }
 
@@ -40,13 +47,20 @@ public class ShopService implements AbstractShopService {
      * @return
      */
     @Override
-    public List<Shop> getAll() {
-        return shopRepository.findAll();
+    public List<ShopDto> getAll() throws NoDataFoundException {
+        List<Shop> shops=shopRepository.findAll();
+        if (shops==null)
+            throw new NoDataFoundException("data does not found");
+        return shopConverter.convertListToListDto(shops);
     }
 
     @Override
-    public Shop getByIdEntity(String idEntity) {
-        return shopRepository.getOne(idEntity);
+    public ShopDto getByIdEntity(String idEntity) throws NoDataFoundException {
+        Shop shop=shopRepository.getOne(idEntity);
+        if(shop==null){
+            throw new NoDataFoundException("User identified"+idEntity+" by not exist");
+        }
+        return shopConverter.convertToDto(shop);
     }
 
     public List<Shop> getShopByCity(String city) throws Exception {
@@ -57,23 +71,23 @@ public class ShopService implements AbstractShopService {
     }
     /**+
      *
-     * @param shop
+     * @param shopDto
      * @return
      */
     @Override
-    public Shop createNewEntity(Shop shop) {
-        return shop;
+    public ShopDto createNewEntity(ShopDto shopDto) throws FailedToSaveDataException {
+        Shop sh=shopRepository.save(shopConverter.convertToEntity(shopDto));
+        if(sh==null)
+            throw new FailedToSaveDataException("Data does not saved");
+        return shopConverter.convertToDto(sh);
     }
 
-    /**+
-     *
-     * @param idEntity
-     * @param shop
-     */
     @Override
-    public void updateEntity(String idEntity, Shop shop) {
+    public void updateEntity(String idEntity, ShopDto shopDto) throws NoDataFoundException {
         Shop sh=shopRepository.getOne(idEntity);
-        Shop s=shopRepository.save(shop);
+        if(sh==null)
+            throw new NoDataFoundException("No Shop was identified by "+idEntity);
+        shopRepository.save(shopConverter.convertToEntity(shopDto));
     }
 
     /***
