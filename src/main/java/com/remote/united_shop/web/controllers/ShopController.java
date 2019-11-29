@@ -4,19 +4,24 @@ import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
 import com.remote.united_shop.data.dto.ShopDto;
 import com.remote.united_shop.data.entities.Shop;
 import com.remote.united_shop.services.AbstractService.AbstractShopService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestOperations;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/shops")
 public class ShopController {
-     private RestOperations restTemplate;
      private final AbstractShopService shopService;
 
     public ShopController(AbstractShopService shopService) {
         this.shopService = shopService;
+    }
+
+    @GetMapping(path = "/",produces = { MediaType.APPLICATION_JSON_VALUE })
+    public List<ShopDto> getAll() throws NoDataFoundException {
+        return shopService.getAll();
     }
 
     @GetMapping(path = "/{name}",produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -30,7 +35,7 @@ public class ShopController {
         return shopService.createNewEntity(shop);
     }
 
-    @PutMapping(path = "/{name}")
+    @PatchMapping(path = "/{name}")
     public boolean updateShop(@PathVariable String name,@RequestBody Shop shop) throws NoDataFoundException {
         return shopService.updateEntity(name,shop);
     }

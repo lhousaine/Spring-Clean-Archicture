@@ -29,7 +29,7 @@ public class Initializer {
 
     public static void InitBD(){
         Shop shop1=new Shop();
-        shop1.setName("shop 1");
+        shop1.setName("shop_1");
         shop1.setDescription(" Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero \" +\n" +
                 "                \"venenatis faucibus. Nullam quis ante.");
         shop1.setLogo("https://shop1");
@@ -38,7 +38,7 @@ public class Initializer {
         shopRepository.save(shop1);
 
         Shop shop2=new Shop();
-        shop2.setName("shop 2");
+        shop2.setName("shop_2");
         shop2.setDescription(" Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero " +
                 "venenatis faucibus. Nullam quis ante. Etiam sit");
         shop2.setLogo("https://shop 2");

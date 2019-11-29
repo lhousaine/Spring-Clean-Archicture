@@ -11,7 +11,6 @@ import com.remote.united_shop.services.AbstractService.AbstractShopService;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -21,15 +20,11 @@ import java.util.List;
 @Transactional
 @NoArgsConstructor
 public class ShopService implements AbstractShopService {
-    private ShopRepository shopRepository;
-    private AbstractShopConverter shopConverter;
-
     @Autowired
-    public ShopService(@Qualifier("ShopConverter") AbstractShopConverter shopConverter, ShopRepository shopRepository) {
-        this.shopConverter = shopConverter;
-        this.shopRepository = shopRepository;
-    }
-
+    private ShopRepository shopRepository;
+    @Autowired
+    @Qualifier("ShopConverter")
+    private AbstractShopConverter shopConverter;
     /**+
      *
      * @param coordinates
@@ -71,13 +66,6 @@ public class ShopService implements AbstractShopService {
         }
         return shopConverter.convertToDto(shop);
     }
-
-    public List<Shop> getShopByCity(String city) throws Exception {
-         List<Shop> shops=shopRepository.findByAddress_City(city);
-         if(shops==null)
-             throw new Exception();
-         return shops;
-    }
     /**+
      *
      * @param shop
@@ -106,11 +94,13 @@ public class ShopService implements AbstractShopService {
      */
     @Override
     public boolean deleteEntity(String idEntity) {
+        boolean success=false;
         try {
             shopRepository.deleteById(idEntity);
-            return true;
+            success=true;
         }catch (Exception e){
-            return false;
+            System.out.println(e.getMessage());
         }
+        return success;
     }
 }

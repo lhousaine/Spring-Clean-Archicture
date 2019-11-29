@@ -26,10 +26,10 @@ public class ShopConverter implements AbstractShopConverter {
 
     @Override
     public List<ShopDto> convertListToListDto(List<Shop> shops) {
-        List<ShopDto> shopDtos=new ArrayList<>();
+        List<ShopDto> shopDtos= new ArrayList<>();
         ShopDto shopDto=new ShopDto();
-        for (Shop user:shops) {
-            GlobalConverter.copyProperties(user,shopDto);
+        for (Shop shop:shops) {
+            GlobalConverter.copyProperties(shop,shopDto);
             shopDtos.add(shopDto);
         }
         return shopDtos;
