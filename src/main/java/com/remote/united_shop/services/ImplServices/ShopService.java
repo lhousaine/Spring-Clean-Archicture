@@ -3,6 +3,7 @@ package com.remote.united_shop.services.ImplServices;
 import com.remote.united_shop.Core.Converters.AbstractConverters.AbstractShopConverter;
 import com.remote.united_shop.Core.Exceptions.FailedToSaveDataException;
 import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
+import com.remote.united_shop.Core.Utils.ShopUtil;
 import com.remote.united_shop.data.dto.ShopDto;
 import com.remote.united_shop.data.entities.Coordinates;
 import com.remote.united_shop.data.entities.Shop;
@@ -14,7 +15,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -27,23 +32,13 @@ public class ShopService implements AbstractShopService {
     private AbstractShopConverter shopConverter;
     /**+
      *
-     * @param coordinates
+     * @param coords
      * @return
      */
 
     @Override
-    public List<ShopDto> nearbyShopsToUser(Coordinates coordinates) {
-        return null;
-    }
-
-    /**+
-     *
-     * @param username
-     * @return
-     */
-    @Override
-    public List<ShopDto> preferredShopsUser(String username) {
-        return null;
+    public List<ShopDto> nearbyShopsToUser(Coordinates coords) throws NoDataFoundException {
+        return ShopUtil.sortShopDtoList(this.getAll(),coords);
     }
 
     /**+

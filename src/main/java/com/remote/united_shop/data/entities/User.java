@@ -50,7 +50,7 @@ public class User implements Serializable {
         this.likedShops.add(shop);
     }
 
-    public void RemoveLikedShop(Shop shop){
+    public void removeLikedShop(Shop shop){
         this.likedShops.remove(shop);
     }
 

@@ -3,7 +3,9 @@ package com.remote.united_shop.services.ImplServices;
 import com.remote.united_shop.Core.Converters.AbstractConverters.AbstractUserConverter;
 import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
 import com.remote.united_shop.data.dto.UserDto;
+import com.remote.united_shop.data.entities.Shop;
 import com.remote.united_shop.data.entities.User;
+import com.remote.united_shop.data.repositories.ShopRepository;
 import com.remote.united_shop.data.repositories.UserRepository;
 import com.remote.united_shop.services.AbstractService.AbstractUserService;
 import lombok.NoArgsConstructor;
@@ -20,26 +22,13 @@ import java.util.List;
 public class UserService implements AbstractUserService {
     private UserRepository userRepository;
     private AbstractUserConverter userConverter;
+    private  ShopRepository shopRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, @Qualifier("UserConverter") AbstractUserConverter userConverter) {
+    public UserService(UserRepository userRepository, @Qualifier("UserConverter") AbstractUserConverter userConverter, ShopRepository shopRepository) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
-    }
-
-    @Override
-    public void likeNewShop(String ShopName) {
-
-    }
-
-    @Override
-    public void dislikeShop(String ShopName) {
-
-    }
-
-    @Override
-    public void removeShopFromPreferredShops(String ShopName) {
-
+        this.shopRepository = shopRepository;
     }
 
     @Override
@@ -82,5 +71,43 @@ public class UserService implements AbstractUserService {
         }catch (Exception e){
             return false;
         }
+    }
+
+    @Override
+    public void likeNewShop(long idUser,String shopName) throws NoDataFoundException {
+        this.likeDislikeShops(idUser,shopName,"likeNewShop");
+    }
+
+    @Override
+    public void dislikeNewShop(long idUser,String shopName) throws NoDataFoundException {
+        this.likeDislikeShops(idUser,shopName,"disLikeNewShop");
+    }
+
+    @Override
+    public void removeShopFromPreferredShops(long idUser,String shopName) throws NoDataFoundException {
+        this.likeDislikeShops(idUser,shopName,"removeLikedShop");
+    }
+
+    public void likeDislikeShops(long idUser,String shopName,String operation) throws NoDataFoundException {
+        User user=userRepository.getOne(idUser);
+        if (user==null)
+            throw new NoDataFoundException("User identified by "+idUser+" Not exist");
+        Shop shop=shopRepository.getOne(shopName);
+        if (shop==null)
+            throw new NoDataFoundException("Shop identified by "+shopName+" Not exist");
+        switch (operation){
+            case "likeNewShop":
+                user.addNewDislikedShop(shop);
+                break;
+            case "disLikeNewShop":
+                user.addNewDislikedShop(shop);
+                break;
+            case "removeLikedShop":
+                user.removeLikedShop(shop);
+                break;
+            default:
+                break;
+        }
+        userRepository.save(user);
     }
 }

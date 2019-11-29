@@ -1,7 +1,6 @@
 package com.remote.united_shop.services.ImplServices;
 
 import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
-import com.remote.united_shop.data.dto.ShopDto;
 import com.remote.united_shop.data.dto.UserDto;
 import com.remote.united_shop.data.entities.Address;
 import com.remote.united_shop.data.entities.Coordinates;
@@ -15,7 +14,6 @@ import org.mockito.MockitoAnnotations;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 public class ImplUserServiceTest {

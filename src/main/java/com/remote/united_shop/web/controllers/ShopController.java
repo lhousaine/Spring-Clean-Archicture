@@ -2,6 +2,7 @@ package com.remote.united_shop.web.controllers;
 
 import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
 import com.remote.united_shop.data.dto.ShopDto;
+import com.remote.united_shop.data.entities.Coordinates;
 import com.remote.united_shop.data.entities.Shop;
 import com.remote.united_shop.services.AbstractService.AbstractShopService;
 import org.springframework.http.MediaType;
@@ -22,6 +23,11 @@ public class ShopController {
     @GetMapping(path = "/",produces = { MediaType.APPLICATION_JSON_VALUE })
     public List<ShopDto> getAll() throws NoDataFoundException {
         return shopService.getAll();
+    }
+
+    @PostMapping(path = "/nearbyshops",produces = { MediaType.APPLICATION_JSON_VALUE })
+    public List<ShopDto> getNeabyShops(@RequestBody Coordinates coordinates) throws NoDataFoundException {
+        return shopService.nearbyShopsToUser(coordinates);
     }
 
     @GetMapping(path = "/{name}",produces = {MediaType.APPLICATION_JSON_VALUE})

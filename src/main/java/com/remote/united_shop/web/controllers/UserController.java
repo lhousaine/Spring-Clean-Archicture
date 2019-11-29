@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/users")
@@ -21,6 +22,7 @@ public class UserController {
     public List<UserDto> getAllUsers() throws NoDataFoundException {
         return userService.getAll();
     }
+
     @GetMapping(path = "/{id}",produces = {MediaType.APPLICATION_JSON_VALUE})
     public UserDto getUser(@PathVariable long id) throws NoDataFoundException {
         return userService.getByIdEntity(id);
@@ -41,4 +43,20 @@ public class UserController {
     public boolean deleteUser(@PathVariable long id){
         return userService.deleteEntity(id);
     }
+
+    @PostMapping(path = "/likeShop",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void userLikeNewShop(@RequestBody Map<String,String> content) throws NoDataFoundException {
+         userService.likeNewShop(Long.parseLong(content.get("idUser")),content.get("shopName"));
+    }
+
+    @PostMapping(path = "/likedShops/remove",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void userRemoveLikedShop(@RequestBody Map<String,String> content) throws NoDataFoundException {
+        userService.removeShopFromPreferredShops(Long.parseLong(content.get("idUser")),content.get("shopName"));
+    }
+
+    @PostMapping(path = "/dislikeShop",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void userDislikeShop(@RequestBody Map<String,String> content) throws NoDataFoundException {
+        userService.dislikeNewShop(Long.parseLong(content.get("idUser")),content.get("shopName"));
+    }
+
 }

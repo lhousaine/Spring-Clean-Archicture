@@ -1,6 +1,7 @@
 package com.remote.united_shop.data.dto;
 
 
+import com.remote.united_shop.Core.Utils.ShopUtil;
 import com.remote.united_shop.data.entities.Address;
 import com.remote.united_shop.data.entities.Coordinates;
 import lombok.AllArgsConstructor;
@@ -16,11 +17,15 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @Getter
 @Setter
-public class ShopDto {
+public class ShopDto{
 
     private String name;
     private String description;
     private String logo;
     private Coordinates coordinates;
     private Address address;
+
+    public double getDistanceToCoordinates(Coordinates coords){
+        return ShopUtil.calculeDistanceShopToCoordinates(this,coords);
+    }
 }
