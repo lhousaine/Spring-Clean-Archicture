@@ -1,26 +1,26 @@
 package com.remote.united_shop.Core.Converters.ImplConverters;
 
 import com.remote.united_shop.Core.Converters.AbstractConverters.AbstractShopConverter;
-import com.remote.united_shop.Core.Converters.Converter;
+import com.remote.united_shop.Core.Converters.GlobalConverter;
 import com.remote.united_shop.data.dto.ShopDto;
-import com.remote.united_shop.data.dto.UserDto;
 import com.remote.united_shop.data.entities.Shop;
-import com.remote.united_shop.data.entities.User;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Component
+@Qualifier("ShopConverter")
 public class ShopConverter implements AbstractShopConverter {
-
     public ShopConverter() {
+
     }
 
     @Override
     public ShopDto convertToDto(Shop shop){
         ShopDto shopDto=new ShopDto();
-        Converter.copyProperties(shop,shopDto);
+        GlobalConverter.copyProperties(shop,shopDto);
         return shopDto;
     }
 
@@ -29,7 +29,7 @@ public class ShopConverter implements AbstractShopConverter {
         List<ShopDto> shopDtos=new ArrayList<>();
         ShopDto shopDto=new ShopDto();
         for (Shop user:shops) {
-            Converter.copyNonNullProperties(user,shopDto);
+            GlobalConverter.copyProperties(user,shopDto);
             shopDtos.add(shopDto);
         }
         return shopDtos;
@@ -38,7 +38,7 @@ public class ShopConverter implements AbstractShopConverter {
     @Override
     public Shop convertToEntity(ShopDto shopDto){
         Shop shop=new Shop();
-        Converter.copyNonNullProperties(shopDto,shop);
+        GlobalConverter.copyProperties(shopDto,shop);
         return  shop;
     }
 
@@ -47,7 +47,7 @@ public class ShopConverter implements AbstractShopConverter {
         List<Shop> shops=new ArrayList<>();
         Shop shop=new Shop();
         for (ShopDto shopDto:shopDtos){
-            Converter.copyNonNullProperties(shopDto,shop);
+            GlobalConverter.copyProperties(shopDto,shop);
             shops.add(shop);
         }
         return shops;

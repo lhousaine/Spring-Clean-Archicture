@@ -1,14 +1,18 @@
 package com.remote.united_shop.Core.Converters.ImplConverters;
 
 import com.remote.united_shop.Core.Converters.AbstractConverters.AbstractUserConverter;
-import com.remote.united_shop.Core.Converters.Converter;
+import com.remote.united_shop.Core.Converters.GlobalConverter;
 import com.remote.united_shop.data.dto.UserDto;
 import com.remote.united_shop.data.entities.User;
+import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
+@Qualifier("UserConverter")
 public class UserConverter implements AbstractUserConverter {
     public UserConverter() {
     }
@@ -16,7 +20,7 @@ public class UserConverter implements AbstractUserConverter {
     @Override
     public UserDto convertToDto(User user) {
         UserDto userDto=new UserDto();
-        Converter.copyNonNullProperties(user,userDto);
+        GlobalConverter.copyProperties(user,userDto);
         return userDto;
     }
 
@@ -25,7 +29,7 @@ public class UserConverter implements AbstractUserConverter {
         List<UserDto> userDtos=new ArrayList<>();
         UserDto userDto=new UserDto();
         for (User user:users) {
-            Converter.copyNonNullProperties(user,userDto);
+            GlobalConverter.copyProperties(user,userDto);
             userDtos.add(userDto);
         }
         return userDtos;
@@ -34,7 +38,7 @@ public class UserConverter implements AbstractUserConverter {
     @Override
     public User convertToEntity(UserDto userDto) {
         User user=new User();
-        Converter.copyNonNullProperties(userDto,user);
+        GlobalConverter.copyProperties(userDto,user);
         return user;
     }
 
@@ -43,7 +47,7 @@ public class UserConverter implements AbstractUserConverter {
         List<User> users=new ArrayList<>();
         User user=new User();
         for (UserDto userDto:userDtos) {
-            Converter.copyNonNullProperties(userDto,user);
+            GlobalConverter.copyProperties(userDto,user);
             users.add(user);
         }
         return users;

@@ -8,19 +8,28 @@ import com.remote.united_shop.data.entities.Coordinates;
 import com.remote.united_shop.data.entities.Shop;
 import com.remote.united_shop.data.repositories.ShopRepository;
 import com.remote.united_shop.services.AbstractService.AbstractShopService;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
+@Transactional
+@NoArgsConstructor
 public class ShopService implements AbstractShopService {
-    @Autowired
     private ShopRepository shopRepository;
-    @Autowired
     private AbstractShopConverter shopConverter;
+
+    @Autowired
+    public ShopService(@Qualifier("ShopConverter") AbstractShopConverter shopConverter, ShopRepository shopRepository) {
+        this.shopConverter = shopConverter;
+        this.shopRepository = shopRepository;
+    }
+
     /**+
      *
      * @param coordinates
@@ -71,32 +80,37 @@ public class ShopService implements AbstractShopService {
     }
     /**+
      *
-     * @param shopDto
+     * @param shop
      * @return
      */
     @Override
-    public ShopDto createNewEntity(ShopDto shopDto) throws FailedToSaveDataException {
-        Shop sh=shopRepository.save(shopConverter.convertToEntity(shopDto));
+    public ShopDto createNewEntity(Shop shop) throws FailedToSaveDataException {
+        Shop sh=shopRepository.save(shop);
         if(sh==null)
             throw new FailedToSaveDataException("Data does not saved");
         return shopConverter.convertToDto(sh);
     }
 
     @Override
-    public void updateEntity(String idEntity, ShopDto shopDto) throws NoDataFoundException {
+    public boolean updateEntity(String idEntity, Shop shop) throws NoDataFoundException {
         Shop sh=shopRepository.getOne(idEntity);
         if(sh==null)
             throw new NoDataFoundException("No Shop was identified by "+idEntity);
-        shopRepository.save(shopConverter.convertToEntity(shopDto));
+        sh=shopRepository.save(shop);
+        return sh != null;
     }
-
     /***
      *
      * @param idEntity
      * @return
      */
     @Override
-    public void deleteEntity(String idEntity) {
-        shopRepository.deleteById(idEntity);
+    public boolean deleteEntity(String idEntity) {
+        try {
+            shopRepository.deleteById(idEntity);
+            return true;
+        }catch (Exception e){
+            return false;
+        }
     }
 }

@@ -1,19 +1,19 @@
 package com.remote.united_shop;
 
-import org.modelmapper.ModelMapper;
+import com.remote.united_shop.Core.InitData.Initializer;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
 
 
 @SpringBootApplication
-public class UnitedShopApplication {
+public class UnitedShopApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(UnitedShopApplication.class, args);
     }
 
-    @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
+    @Override
+    public void run(String... args) throws Exception {
+        Initializer.InitBD();
     }
 }

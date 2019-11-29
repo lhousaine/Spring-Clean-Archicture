@@ -42,8 +42,20 @@ public class User implements Serializable {
             inverseJoinColumns=@JoinColumn(name="shopName"))
     private Set<Shop> likedShops;
     @ManyToMany(cascade=CascadeType.ALL)
-    @JoinTable(name="dislikedShops", joinColumns=@JoinColumn(name="userEmail"),
+    @JoinTable(name="dislikedShops", joinColumns=@JoinColumn(name="userId"),
             inverseJoinColumns=@JoinColumn(name="shopName"))
     private Set<Shop> dislikedShops;
+
+    public void addNewLikedShod(Shop shop){
+        this.likedShops.add(shop);
+    }
+
+    public void RemoveLikedShop(Shop shop){
+        this.likedShops.remove(shop);
+    }
+
+    public void addNewDislikedShop(Shop shop){
+        this.dislikedShops.add(shop);
+    }
 
 }

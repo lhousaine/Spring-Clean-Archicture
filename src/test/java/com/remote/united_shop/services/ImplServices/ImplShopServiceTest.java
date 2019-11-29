@@ -37,21 +37,17 @@ public class ImplShopServiceTest {
        shop.setLogo("https://shop 1");
        shop.setCoordinates(new Coordinates(10,20));
        when(shopRepository.getOne(anyString())).thenReturn(shop);
-
-       ShopDto sh=shopService.getByIdEntity("lhou");
-        assertThrows(Exception.class,
-                ()->{
-                    assertNotNull(sh);
-                    assertEquals("shop 1",sh.getName());
-                }
-        );
+       ShopDto sh=shopService.getByIdEntity("shop 1");
+       assertNotNull(sh);
+       assertEquals("shop 1",sh.getName());
     }
+
     @Test
-    final void testGetUserByEmailPassword(){
-        when(shopRepository.findByAddress_City(anyString())).thenReturn(null);
+    final void testGetByIdShopThrowingException()  {
+        when(shopRepository.getOne(anyString())).thenReturn(null);
         assertThrows(Exception.class,
                 ()->{
-                   shopService.getShopByCity("agadir");
+                    shopService.getByIdEntity("shop 1");
                 }
         );
     }

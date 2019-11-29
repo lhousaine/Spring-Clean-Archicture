@@ -1,7 +1,8 @@
-package com.remote.united_shop.Core.Converters;
+package com.remote.united_shop.Core.Converters.EntityConverters;
 
-import com.remote.united_shop.Core.Converters.ImplConverters.ShopConverter;
+import com.remote.united_shop.Core.Converters.GlobalConverter;
 import com.remote.united_shop.data.dto.ShopDto;
+import com.remote.united_shop.data.entities.Address;
 import com.remote.united_shop.data.entities.Coordinates;
 import com.remote.united_shop.data.entities.Shop;
 import org.junit.jupiter.api.Test;
@@ -16,8 +17,9 @@ public class ShopConverterDtoTest {
         shop.setDescription("shop 1 shop 1");
         shop.setLogo("https://shop 1");
         shop.setCoordinates(new Coordinates(10,20));
+        shop.setAddress(new Address("123","rue 20","marrakech","maroc"));
         ShopDto shopDto=new ShopDto();
-        Converter.copyProperties(shop,shopDto);
+        GlobalConverter.copyProperties(shop,shopDto);
         assertEquals(shop.getName(), shopDto.getName());
         assertEquals(shop.getDescription(), shop.getDescription());
         assertEquals(shop.getLogo(), shop.getLogo());
@@ -32,8 +34,9 @@ public class ShopConverterDtoTest {
         shopd.setDescription("shop 1 shop 1");
         shopd.setLogo("https://shop 1");
         shopd.setCoordinates(new Coordinates(10,20));
+        shopd.setAddress(new Address("123","rue 20","marrakech","maroc"));
         Shop shop=new Shop();
-        Converter.copyNonNullProperties(shopd,shop);
+        GlobalConverter.copyProperties(shopd,shop);
         assertEquals(shopd.getName(), shop.getName());
         assertEquals(shopd.getDescription(), shop.getDescription());
         assertEquals(shopd.getLogo(), shop.getLogo());

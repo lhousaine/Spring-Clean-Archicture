@@ -7,11 +7,11 @@ import org.springframework.beans.BeanWrapperImpl;
 import java.beans.FeatureDescriptor;
 import java.util.Arrays;
 
-public class Converter {
-
-        public Converter() {
+public class GlobalConverter {
+        public GlobalConverter() {
             throw new IllegalArgumentException("Don't create instance Utility class!");
         }
+
         public static void copyProperties(Object s, Object t) {
             BeanUtils.copyProperties(s, t);
         }
@@ -22,7 +22,6 @@ public class Converter {
 
         private static String[] getNullPropertyNames(Object source) {
             final BeanWrapper src = new BeanWrapperImpl(source);
-
             return Arrays.stream(src.getPropertyDescriptors())
                     .map(FeatureDescriptor::getName)
                     .filter(name -> src.getPropertyValue(name) == null)

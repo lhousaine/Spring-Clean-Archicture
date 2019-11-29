@@ -1,17 +1,15 @@
-package com.remote.united_shop.Core.Converters;
+package com.remote.united_shop.Core.Converters.EntityConverters;
 
-import com.remote.united_shop.Core.Converters.AbstractConverters.AbstractUserConverter;
+import com.remote.united_shop.Core.Converters.GlobalConverter;
 import com.remote.united_shop.data.dto.UserDto;
 import com.remote.united_shop.data.entities.Address;
 import com.remote.united_shop.data.entities.Coordinates;
 import com.remote.united_shop.data.entities.User;
 import org.junit.jupiter.api.Test;
-import org.modelmapper.ModelMapper;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserDtoUnitTest {
-
+public class UserConverterDtoTest {
     @Test
     public void whenConvertingUserEntityToDto() {
         User user=new User();
@@ -24,7 +22,7 @@ public class UserDtoUnitTest {
 
         UserDto userDto=new UserDto();
 
-        Converter.copyNonNullProperties(user,userDto);
+        GlobalConverter.copyProperties(user,userDto);
 
         assertEquals(user.getUserId(), userDto.getUserId());
         assertEquals(user.getFirstName(), userDto.getFirstName());
@@ -45,7 +43,7 @@ public class UserDtoUnitTest {
 
         User user=new User();
 
-        Converter.copyNonNullProperties(userd,user);
+        GlobalConverter.copyProperties(userd,user);
 
         assertEquals(user.getUserId(), userd.getUserId());
         assertEquals(user.getFirstName(), userd.getFirstName());
