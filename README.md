@@ -26,8 +26,8 @@ to do that, I am using the BeanUtils with its functions
 **Repositories** : Convert and present data to the services layer from the database.</br>
 **Services** : it contains all functions job of required by the controllers.this all functions returns data as DTO objects.</br>
 **Web**:  </br>
-Controllers : they are rest controllers permit to build all endpoints of the API.</br>
-Exceptions : I am trying to customize exceptions and it is status code.
+**Controllers** : they are rest controllers permit to build all endpoints of the API.</br>
+**Exceptions** : I am trying to customize exceptions and it is status code.
 
 
 
