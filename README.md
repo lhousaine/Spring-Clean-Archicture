@@ -1,11 +1,11 @@
 # shop-back-end
-This project is built with The spring framework of java EE, I was using multiple spring modules like :
-Spring Boot : to create stand-alone, production-grade Spring based Applications.  
-Spring Data : for interacting with the database.  
-Spring Security : to secure all endpoints, I add the JWT models for authenticating users.</br>
-Spring Data Rest :makes it easy to build hypermedia-driven REST web services on top of Spring Data repositories.
-JPA : it is a Java specification for accessing, persisting, and managing data between Java objects / classes and a relational database.
-Mockito and Junit :for creating all functions tests.
+This project is built with The spring framework of java EE, I was using multiple spring modules like :  
+**Spring Boot** : to create stand-alone, production-grade Spring based Applications.  
+**Spring Data **: for interacting with the database.  
+**Spring Security **: to secure all endpoints, I add the JWT models for authenticating users.</br>
+**Spring Data Rest** :makes it easy to build hypermedia-driven REST web services on top of Spring Data repositories.</br>
+**JPA **: it is a Java specification for accessing, persisting, and managing data between Java objects / classes and a relational database.</br>
+**Mockito and Junit** :for creating all functions tests.
      The architecture of the project follows the principles of Clean Architecture. It is a simple API endpoint.
 It is list shops filtering by users likes, dislikes and coordinates. It offers a user to authenticate or creating an account by his mail and password.
 In this I have worked with the TDD-Test driven development.
