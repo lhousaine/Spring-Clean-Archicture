@@ -13,20 +13,20 @@ So, the project is composed by two mainly directories :</br>
 **Main** : for java coding features of the app.</br>
 **Test** : is like Main, it contains the same directories as Main contains. It is creating create tests of all logic functions of the project.</br>
 The Main directory is composed of directories :</br>
-* Core 1
-* Converters 1a
-  * Exceptions 1b
-  * InitData 1c
-  * Security 1d
-  * Utiles 1d
-* Data 2
-  * DTO 2a
-  * Entities 2b
-  * Repositories 2c
-* Services 3
-* Web 4
-  * Controllers 4a
-  * Exceptions 4b 
+* Core 
+* Converters 
+  * Exceptions 
+  * InitData 
+  * Security 
+  * Utiles 
+* Data 
+  * DTO 
+  * Entities 
+  * Repositories 
+* Services 
+* Web 
+  * Controllers 
+  * Exceptions  
   
 **Core** : is composed of the features that are constants and shared between all the others part of project, it is composed by :</br>
 **Converters** : it is contains functions used to convert from entities to dto and inversely from dto to entities,
