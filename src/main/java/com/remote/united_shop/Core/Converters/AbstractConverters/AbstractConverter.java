@@ -1,8 +1,12 @@
 package com.remote.united_shop.Core.Converters.AbstractConverters;
 
-import java.text.ParseException;
 import java.util.List;
 
+/***
+ *
+ * @param <U>
+ * @param <V>
+ */
 public interface AbstractConverter<U,V> {
     public V convertToDto(U u);
     public List<V> convertListToListDto(List<U> us);

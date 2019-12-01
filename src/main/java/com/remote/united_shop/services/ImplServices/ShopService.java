@@ -9,31 +9,34 @@ import com.remote.united_shop.data.entities.Coordinates;
 import com.remote.united_shop.data.entities.Shop;
 import com.remote.united_shop.data.repositories.ShopRepository;
 import com.remote.united_shop.services.AbstractService.AbstractShopService;
-import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Transactional
-@NoArgsConstructor
 public class ShopService implements AbstractShopService {
-    @Autowired
     private ShopRepository shopRepository;
-    @Autowired
-    @Qualifier("ShopConverter")
     private AbstractShopConverter shopConverter;
-    /**+
+
+    /***
+     *
+     * @param shopRepository
+     * @param shopConverter
+     */
+    public ShopService(ShopRepository shopRepository, @Qualifier("ShopConverter") AbstractShopConverter shopConverter) {
+        this.shopRepository = shopRepository;
+        this.shopConverter = shopConverter;
+    }
+
+    /***
      *
      * @param coords
      * @return
+     * @throws NoDataFoundException
      */
 
     @Override
@@ -41,9 +44,10 @@ public class ShopService implements AbstractShopService {
         return ShopUtil.sortShopDtoList(this.getAll(),coords);
     }
 
-    /**+
+    /***
      *
      * @return
+     * @throws NoDataFoundException
      */
     @Override
     public List<ShopDto> getAll() throws NoDataFoundException {
@@ -53,6 +57,12 @@ public class ShopService implements AbstractShopService {
         return shopConverter.convertListToListDto(shops);
     }
 
+    /**
+     *
+     * @param idEntity
+     * @return
+     * @throws NoDataFoundException
+     */
     @Override
     public ShopDto getByIdEntity(String idEntity) throws NoDataFoundException {
         Shop shop=shopRepository.getOne(idEntity);
@@ -61,10 +71,12 @@ public class ShopService implements AbstractShopService {
         }
         return shopConverter.convertToDto(shop);
     }
-    /**+
+
+    /**
      *
      * @param shop
      * @return
+     * @throws FailedToSaveDataException
      */
     @Override
     public ShopDto createNewEntity(Shop shop) throws FailedToSaveDataException {
@@ -74,6 +86,13 @@ public class ShopService implements AbstractShopService {
         return shopConverter.convertToDto(sh);
     }
 
+    /***
+     *
+     * @param idEntity
+     * @param shop
+     * @return
+     * @throws NoDataFoundException
+     */
     @Override
     public boolean updateEntity(String idEntity, Shop shop) throws NoDataFoundException {
         Shop sh=shopRepository.getOne(idEntity);
@@ -82,14 +101,17 @@ public class ShopService implements AbstractShopService {
         sh=shopRepository.save(shop);
         return sh != null;
     }
-    /***
+
+    /**
      *
      * @param idEntity
      * @return
      */
     @Override
-    public boolean deleteEntity(String idEntity) {
+    public boolean deleteEntity(String idEntity) throws NoDataFoundException {
         boolean success=false;
+        if(shopRepository.getOne(idEntity)==null)
+            throw new NoDataFoundException("No Shop was identified by "+idEntity);
         try {
             shopRepository.deleteById(idEntity);
             success=true;

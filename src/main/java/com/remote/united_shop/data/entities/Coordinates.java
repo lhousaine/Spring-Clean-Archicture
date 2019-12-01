@@ -11,8 +11,10 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @Embeddable
 public class Coordinates{
+
     @NotNull
    private double latitude;
+
     @NotNull
    private double longitude;
 }

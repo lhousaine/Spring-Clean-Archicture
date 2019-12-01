@@ -20,13 +20,17 @@ public class Shop implements Serializable {
     @NotNull
     @Column(unique = true)
     private String name;
+
     @NotNull
     @Size(min = 100)
     private String description;
+
     @NotNull
     private String logo;
+
     @Embedded
     private Coordinates coordinates;
+
     @Embedded
     private Address address;
 }

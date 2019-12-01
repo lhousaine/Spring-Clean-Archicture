@@ -1,4 +1,5 @@
-package com.remote.united_shop.Core.configuration.constents;
+package com.remote.united_shop.Core.Security;
+
 
 public interface SecurityParams {
     public static final String JWT_HEADER_NAME="Authorization";

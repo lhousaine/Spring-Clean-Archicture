@@ -13,10 +13,11 @@ import java.util.List;
 @Component
 @Qualifier("ShopConverter")
 public class ShopConverter implements AbstractShopConverter {
-    public ShopConverter() {
-
-    }
-
+    /**
+     *
+     * @param shop
+     * @return
+     */
     @Override
     public ShopDto convertToDto(Shop shop){
         ShopDto shopDto=new ShopDto();
@@ -24,6 +25,11 @@ public class ShopConverter implements AbstractShopConverter {
         return shopDto;
     }
 
+    /***
+     *
+     * @param shops
+     * @return
+     */
     @Override
     public List<ShopDto> convertListToListDto(List<Shop> shops) {
         List<ShopDto> shopDtos= new ArrayList<>();
@@ -35,6 +41,11 @@ public class ShopConverter implements AbstractShopConverter {
         return shopDtos;
     }
 
+    /***
+     *
+     * @param shopDto
+     * @return
+     */
     @Override
     public Shop convertToEntity(ShopDto shopDto){
         Shop shop=new Shop();
@@ -42,6 +53,11 @@ public class ShopConverter implements AbstractShopConverter {
         return  shop;
     }
 
+    /***
+     *
+     * @param shopDtos
+     * @return
+     */
     @Override
     public List<Shop> convertListDtoToListEntity(List<ShopDto> shopDtos){
         List<Shop> shops=new ArrayList<>();

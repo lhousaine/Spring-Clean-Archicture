@@ -4,12 +4,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -17,44 +21,65 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "users")
-public class User implements Serializable {
+public class AppUser implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long userId;
+    private long id;
+
     @NotNull
     @Size(max =50,min = 3)
     private String firstName;
+
     @NotNull
     @Size(max =50,min = 3)
     private String lastName;
+
     @Email
     @Column(unique = true)
     private String email;
+
     @NotNull
-    @Size(min = 8,max=20)
+    @Size(min = 8)
+
     private String password;
+
     @Embedded
     private Coordinates coordinates;
+
     @Embedded
     private Address address;
-    @ManyToMany(cascade=CascadeType.ALL)
+
+    @ManyToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name="likedShops", joinColumns=@JoinColumn(name="userId"),
             inverseJoinColumns=@JoinColumn(name="shopName"))
     private Set<Shop> likedShops;
-    @ManyToMany(cascade=CascadeType.ALL)
+
+    @ManyToMany(cascade=CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name="dislikedShops", joinColumns=@JoinColumn(name="userId"),
             inverseJoinColumns=@JoinColumn(name="shopName"))
     private Set<Shop> dislikedShops;
-
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles=new HashSet<>();
+    /***
+     *
+     * @param shop
+     */
     public void addNewLikedShod(Shop shop){
         this.likedShops.add(shop);
     }
-
-    public void removeLikedShop(Shop shop){
+    /***
+     *
+     * @param shop
+     */
+    public void removeLikedShop(Shop shop) {
         this.likedShops.remove(shop);
     }
 
-    public void addNewDislikedShop(Shop shop){
+    /***
+     *
+     * @param shop
+     */
+    public void addNewDislikedShop(Shop shop) {
         this.dislikedShops.add(shop);
     }
 

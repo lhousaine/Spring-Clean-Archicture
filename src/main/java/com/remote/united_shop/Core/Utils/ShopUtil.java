@@ -8,10 +8,23 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ShopUtil {
+    /***
+     *
+     * @param shopDto
+     * @param coordinates
+     * @return
+     */
     public static double calculeDistanceShopToCoordinates(ShopDto shopDto, Coordinates coordinates){
         return Math.sqrt(Math.pow(shopDto.getCoordinates().getLatitude()-coordinates.getLatitude(),2)
                 +Math.pow(shopDto.getCoordinates().getLongitude()-coordinates.getLongitude(),2));
     }
+
+    /***
+     *
+     * @param shopDtos
+     * @param coords
+     * @return
+     */
     public static List<ShopDto> sortShopDtoList(List<ShopDto> shopDtos,Coordinates coords){
         Collections.sort(shopDtos, new Comparator<ShopDto>(){
             @Override

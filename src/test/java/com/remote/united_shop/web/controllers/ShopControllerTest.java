@@ -15,8 +15,7 @@ import org.mockito.MockitoAnnotations;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyObject;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -29,11 +28,15 @@ public class ShopControllerTest {
     @Mock
     private AbstractShopService shopService;
 
-    String shopName="shop_1";
+    final String shopName="shop_1";
     ShopDto shopDto;
     Shop shop;
     List<ShopDto> shops;
 
+    /***
+     *
+     * @throws Exception
+     */
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
@@ -47,6 +50,10 @@ public class ShopControllerTest {
         shops.add(shopDto);
     }
 
+    /**
+     *
+     * @throws NoDataFoundException
+     */
     @Test
     public void whenGetAll() throws NoDataFoundException {
         when(shopService.getAll()).thenReturn(shops);
@@ -59,6 +66,24 @@ public class ShopControllerTest {
         assertEquals(shs.get(0).getAddress(),shops.get(0).getAddress());
     }
 
+    /***
+     *
+     * @throws NoDataFoundException
+     */
+    @Test
+    final void testGetAllThrowingException() throws NoDataFoundException {
+        when(shopService.getAll()).thenThrow();
+        assertThrows(Exception.class,
+                ()->{
+                    shopController.getAll();
+                }
+        );
+    }
+
+    /**
+     *
+     * @throws NoDataFoundException
+     */
     @Test
     public void whenGetShop() throws NoDataFoundException {
     when(shopService.getByIdEntity(anyString())).thenReturn(shopDto);
@@ -67,6 +92,24 @@ public class ShopControllerTest {
      assertEquals(shopDto.getName(),sh.getName());
     }
 
+    /**
+     *
+     * @throws NoDataFoundException
+     */
+    @Test
+    final void testGetShopByNameThrowingException() throws NoDataFoundException {
+        when(shopService.getByIdEntity(anyString())).thenThrow();
+        assertThrows(Exception.class,
+                ()->{
+                    shopController.getShop(shopName);
+                }
+        );
+    }
+
+    /**
+     *
+     * @throws Exception
+     */
     @Test
     public void whenCreateShop() throws Exception {
         when(shopService.createNewEntity(anyObject())).thenReturn(shopDto);
@@ -75,6 +118,24 @@ public class ShopControllerTest {
         assertEquals(shopDto.getName(),sh.getName());
     }
 
+    /**
+     *
+     * @throws Exception
+     */
+    @Test
+    final void testCreateShopThrowingException() throws Exception {
+        when(shopService.createNewEntity(shop)).thenThrow();
+        assertThrows(Exception.class,
+                ()->{
+                    shopController.createShop(shop);
+                }
+        );
+    }
+
+    /**
+     *
+     * @throws Exception
+     */
     @Test
     public void  whenUpdateShop() throws Exception {
         when(shopService.updateEntity(anyString(),anyObject())).thenReturn(true);
@@ -82,11 +143,42 @@ public class ShopControllerTest {
         assertEquals(done,true);
     }
 
-
+    /**
+     *
+     * @throws NoDataFoundException
+     */
     @Test
-    public void whenDeleteShop() {
+    final void testUpdateShopThrowingException() throws NoDataFoundException {
+        when(shopService.updateEntity(anyString(),anyObject())).thenThrow();
+        assertThrows(Exception.class,
+                ()->{
+                    shopController.updateShop(shopName,shop);
+                }
+        );
+    }
+
+    /***
+     *
+     * @throws NoDataFoundException
+     */
+    @Test
+    public void whenDeleteShop() throws NoDataFoundException {
         when(shopService.deleteEntity(anyString())).thenReturn(true);
         boolean done=shopController.deleteShop(shopName);
         assertEquals(done,true);
+    }
+
+    /***
+     *
+     * @throws NoDataFoundException
+     */
+    @Test
+    final void testDeleteShopThrowingException() throws NoDataFoundException {
+        when(shopService.deleteEntity(anyString())).thenThrow();
+        assertThrows(Exception.class,
+                ()->{
+                    shopController.deleteShop(shopName);
+                }
+        );
     }
 }

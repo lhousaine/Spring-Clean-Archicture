@@ -9,11 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Embedded;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
-
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -25,6 +22,11 @@ public class ShopDto{
     private Coordinates coordinates;
     private Address address;
 
+    /**
+     *
+     * @param coords
+     * @return
+     */
     public double getDistanceToCoordinates(Coordinates coords){
         return ShopUtil.calculeDistanceShopToCoordinates(this,coords);
     }

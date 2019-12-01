@@ -1,38 +1,48 @@
 package com.remote.united_shop.Core.InitData;
 
-import com.remote.united_shop.data.dto.UserDto;
-import com.remote.united_shop.data.entities.Address;
-import com.remote.united_shop.data.entities.Coordinates;
-import com.remote.united_shop.data.entities.Shop;
-import com.remote.united_shop.data.entities.User;
+import com.remote.united_shop.data.entities.*;
+import com.remote.united_shop.data.repositories.RoleRepository;
 import com.remote.united_shop.data.repositories.ShopRepository;
 import com.remote.united_shop.data.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 @Component
 @Transactional
 public class Initializer {
     private static UserRepository userRepository;
     private static ShopRepository shopRepository;
+    private static BCryptPasswordEncoder bCryptPasswordEncoder;
+    private static RoleRepository roleRepository;
 
+    /**
+     *
+     * @param shopRepository
+     * @param userRepository
+     * @param bCryptPasswordEncoder
+     * @param roleRepository
+     */
     @Autowired
-    public Initializer(ShopRepository shopRepository, UserRepository userRepository) {
+    public Initializer(ShopRepository shopRepository, UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
         Initializer.shopRepository = shopRepository;
         Initializer.userRepository = userRepository;
+        Initializer.bCryptPasswordEncoder = bCryptPasswordEncoder;
+        Initializer.roleRepository = roleRepository;
     }
 
+    /***
+     * Initiliaze the data base with values for testing the api end-points
+     */
     public static void InitBD(){
+        Role r1=roleRepository.save(new Role("USER"));
+        Role r2=roleRepository.save(new Role("ADMIN"));
         Shop shop1=new Shop();
         shop1.setName("shop_1");
         shop1.setDescription(" Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero \" +\n" +
                 "                \"venenatis faucibus. Nullam quis ante.");
-        shop1.setLogo("https://shop1");
+        shop1.setLogo("https://i.ibb.co/R9sc5vD/shop-1.jpg");
         shop1.setCoordinates(new Coordinates(32.5,8));
         shop1.setAddress(new Address("123","rue 20","marrakech","maroc"));
         shopRepository.save(shop1);
@@ -41,29 +51,30 @@ public class Initializer {
         shop2.setName("shop_2");
         shop2.setDescription(" Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero " +
                 "venenatis faucibus. Nullam quis ante. Etiam sit");
-        shop2.setLogo("https://shop 2");
+        shop2.setLogo("https://i.ibb.co/6tSMk43/shop-2.jpg");
         shop2.setCoordinates(new Coordinates(35,8));
         shop2.setAddress(new Address("130","rue Asfi ","marrakech","maroc"));
         shopRepository.save(shop2);
 
-        User user1=new User();
-        user1.setFirstName("lhoussaine");
-        user1.setLastName("ouarhou");
-        user1.setEmail("em@gmail.com");
-        user1.setPassword("123456789");
-        user1.setAddress(new Address("123","rue 20","marrakech","maroc"));
-        user1.setCoordinates(new Coordinates(31.6295,7.98));
+        AppUser appUser1 =new AppUser();
+        appUser1.setFirstName("lhoussaine");
+        appUser1.setLastName("ouarhou");
+        appUser1.setEmail("em@gmail.com");
+        appUser1.setPassword(bCryptPasswordEncoder.encode("12345678"));
+        appUser1.setAddress(new Address("123","rue 20","marrakech","maroc"));
+        appUser1.setCoordinates(new Coordinates(31.6295,7.98));
+        appUser1.getRoles().add(r1);
 
-        userRepository.save(user1);
+        userRepository.save(appUser1);
 
-        User user2=new User();
-        user2.setFirstName("lhou");
-        user2.setLastName("ouarhou");
-        user2.setEmail("lhou@gmail.com");
-        user2.setPassword("12345678");
-        user2.setAddress(new Address("130","rue 20","marrakech","maroc"));
-        user2.setCoordinates(new Coordinates(31.625,7.98));
-
-        userRepository.save(user2);
+        AppUser appUser2 =new AppUser();
+        appUser2.setFirstName("lhou");
+        appUser2.setLastName("ouarhou");
+        appUser2.setEmail("lhou@gmail.com");
+        appUser2.setPassword(bCryptPasswordEncoder.encode("12345678"));
+        appUser2.setAddress(new Address("130","rue 20","marrakech","maroc"));
+        appUser2.setCoordinates(new Coordinates(31.625,7.98));
+        appUser2.getRoles().add(r2);
+        userRepository.save(appUser2);
     }
 }

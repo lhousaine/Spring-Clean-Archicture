@@ -8,19 +8,36 @@ import java.beans.FeatureDescriptor;
 import java.util.Arrays;
 
 public class GlobalConverter {
-        public GlobalConverter() {
-            throw new IllegalArgumentException("Don't create instance Utility class!");
-        }
 
-        public static void copyProperties(Object s, Object t) {
-            BeanUtils.copyProperties(s, t);
-        }
+    public GlobalConverter() {
+        throw new IllegalArgumentException("Don't create instance Utility class!");
+    }
 
-        public static void copyNonNullProperties(Object s, Object t) {
-            BeanUtils.copyProperties(s, t, getNullPropertyNames(s));
-        }
+    /***
+     *
+     * @param s
+     * @param t
+     */
+     public static void copyProperties(Object s, Object t) {
 
-        private static String[] getNullPropertyNames(Object source) {
+         BeanUtils.copyProperties(s, t);
+     }
+
+    /***
+     *
+     * @param s
+     * @param t
+     */
+    public static void copyNonNullProperties(Object s, Object t) {
+        BeanUtils.copyProperties(s, t, getNullPropertyNames(s));
+    }
+
+    /***
+     *
+     * @param source
+     * @return
+     */
+    private static String[] getNullPropertyNames(Object source) {
             final BeanWrapper src = new BeanWrapperImpl(source);
             return Arrays.stream(src.getPropertyDescriptors())
                     .map(FeatureDescriptor::getName)

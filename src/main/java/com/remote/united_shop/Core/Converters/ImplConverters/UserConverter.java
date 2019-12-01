@@ -3,8 +3,7 @@ package com.remote.united_shop.Core.Converters.ImplConverters;
 import com.remote.united_shop.Core.Converters.AbstractConverters.AbstractUserConverter;
 import com.remote.united_shop.Core.Converters.GlobalConverter;
 import com.remote.united_shop.data.dto.UserDto;
-import com.remote.united_shop.data.entities.User;
-import lombok.NoArgsConstructor;
+import com.remote.united_shop.data.entities.AppUser;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
@@ -17,39 +16,59 @@ public class UserConverter implements AbstractUserConverter {
     public UserConverter() {
     }
 
+    /***
+     *
+     * @param appUser
+     * @return
+     */
     @Override
-    public UserDto convertToDto(User user) {
+    public UserDto convertToDto(AppUser appUser) {
         UserDto userDto=new UserDto();
-        GlobalConverter.copyProperties(user,userDto);
+        GlobalConverter.copyProperties(appUser,userDto);
         return userDto;
     }
 
+    /***
+     *
+     * @param appUsers
+     * @return
+     */
     @Override
-    public List<UserDto> convertListToListDto(List<User> users) {
+    public List<UserDto> convertListToListDto(List<AppUser> appUsers) {
         List<UserDto> userDtos=new ArrayList<>();
         UserDto userDto=new UserDto();
-        for (User user:users) {
-            GlobalConverter.copyProperties(user,userDto);
+        for (AppUser appUser : appUsers) {
+            GlobalConverter.copyProperties(appUser,userDto);
             userDtos.add(userDto);
         }
         return userDtos;
     }
 
+    /**+
+     *
+     * @param userDto
+     * @return
+     */
     @Override
-    public User convertToEntity(UserDto userDto) {
-        User user=new User();
-        GlobalConverter.copyProperties(userDto,user);
-        return user;
+    public AppUser convertToEntity(UserDto userDto) {
+        AppUser appUser =new AppUser();
+        GlobalConverter.copyProperties(userDto, appUser);
+        return appUser;
     }
 
+    /***
+     *
+     * @param userDtos
+     * @return
+     */
     @Override
-    public List<User> convertListDtoToListEntity(List<UserDto> userDtos) {
-        List<User> users=new ArrayList<>();
-        User user=new User();
+    public List<AppUser> convertListDtoToListEntity(List<UserDto> userDtos) {
+        List<AppUser> appUsers =new ArrayList<>();
+        AppUser appUser =new AppUser();
         for (UserDto userDto:userDtos) {
-            GlobalConverter.copyProperties(userDto,user);
-            users.add(user);
+            GlobalConverter.copyProperties(userDto, appUser);
+            appUsers.add(appUser);
         }
-        return users;
+        return appUsers;
     }
 }

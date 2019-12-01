@@ -3,8 +3,9 @@ package com.remote.united_shop.web.exceptions;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
-public class SystemException {
-    private int code;
-    private String message;
+public abstract class SystemException {
+    protected int code;
+    protected String message;
+    public abstract String  handleError();
 }
 
