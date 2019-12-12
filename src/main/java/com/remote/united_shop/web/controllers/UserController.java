@@ -1,10 +1,12 @@
 package com.remote.united_shop.web.controllers;
 
 import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
+import com.remote.united_shop.data.dto.ShopDto;
 import com.remote.united_shop.data.dto.UserDto;
 import com.remote.united_shop.data.entities.AppUser;
 import com.remote.united_shop.services.AbstractService.AbstractUserService;
 import org.springframework.http.MediaType;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -15,7 +17,6 @@ import java.util.Map;
 public class UserController {
 
     private final AbstractUserService userService;
-
     /**
      *
      * @param userService
@@ -44,7 +45,6 @@ public class UserController {
     public UserDto getUser(@PathVariable long id) throws NoDataFoundException {
         return userService.getByIdEntity(id);
     }
-
     /***
      *
      * @param appUser
@@ -54,9 +54,9 @@ public class UserController {
     @PostMapping(path ="/register",consumes = {MediaType.APPLICATION_JSON_VALUE},
             produces ={MediaType.APPLICATION_JSON_VALUE})
     public UserDto createUser(@RequestBody AppUser appUser) throws Exception {
+        System.out.println(appUser.toString());
         return userService.createNewEntity(appUser);
     }
-
     /***
      *
      * @param id
@@ -78,16 +78,35 @@ public class UserController {
     public boolean deleteUser(@PathVariable long id) throws NoDataFoundException {
         return userService.deleteEntity(id);
     }
-
+    /***
+     *
+     * @param content
+     * @return
+     */
+    @PostMapping(value = "/user",consumes = {MediaType.APPLICATION_JSON_VALUE},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public UserDto getUserByMail(@RequestBody Map<String,String> content) throws NoDataFoundException {
+        return userService.findUserByEmail(content.get("email"));
+    }
     /***
      *
      * @param content
      * @return
      * @throws NoDataFoundException
      */
-    @PostMapping(path = "/likeShop",produces = {MediaType.APPLICATION_JSON_VALUE})
-    public boolean userLikeNewShop(@RequestBody Map<String,String> content) throws NoDataFoundException {
-         return userService.likeNewShop(Long.parseLong(content.get("idUser")),content.get("shopName"));
+    @PostMapping(path = "/like-shop",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ShopDto userLikeNewShop(@RequestBody Map<String,String> content) throws NoDataFoundException {
+         return userService.likeNewShop(content.get("email"),content.get("shopName"));
+    }
+    /***
+     *
+     * @param content
+     * @return
+     * @throws NoDataFoundException
+     */
+    @PostMapping(path = "/preferred-shops",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public List<ShopDto> preferredShopsToUser(@RequestBody Map<String,String> content) throws NoDataFoundException {
+        return userService.preferredShopsToUser(content.get("email"));
     }
 
     /***
@@ -96,9 +115,9 @@ public class UserController {
      * @return
      * @throws NoDataFoundException
      */
-    @PostMapping(path = "/likedShops/remove",produces = {MediaType.APPLICATION_JSON_VALUE})
-    public boolean userRemoveLikedShop(@RequestBody Map<String,String> content) throws NoDataFoundException {
-        return userService.removeShopFromPreferredShops(Long.parseLong(content.get("idUser")),content.get("shopName"));
+    @PostMapping(path = "/preferred-shops/remove",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ShopDto userRemoveLikedShop(@RequestBody Map<String,String> content) throws NoDataFoundException {
+        return userService.removeShopFromPreferredShops(content.get("email"),content.get("shopName"));
     }
 
     /***
@@ -107,8 +126,8 @@ public class UserController {
      * @return
      * @throws NoDataFoundException
      */
-    @PostMapping(path = "/dislikeShop",produces = {MediaType.APPLICATION_JSON_VALUE})
-    public boolean userDislikeShop(@RequestBody Map<String,String> content) throws NoDataFoundException {
-        return userService.dislikeNewShop(Long.parseLong(content.get("idUser")),content.get("shopName"));
+    @PostMapping(path = "/dislike-shop",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ShopDto userDislikeShop(@RequestBody Map<String,String> content) throws NoDataFoundException {
+        return userService.dislikeNewShop(content.get("email"),content.get("shopName"));
     }
 }

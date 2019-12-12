@@ -13,12 +13,10 @@ public class UnitedShopApplication implements CommandLineRunner {
     public static void main(String[] args) {
         SpringApplication.run(UnitedShopApplication.class, args);
     }
-
     @Override
     public void run(String... args) throws Exception {
-        Initializer.InitBD();
+        //Initializer.InitBD();
     }
-
     @Bean
     BCryptPasswordEncoder getBCPE(){
         return new BCryptPasswordEncoder();

@@ -64,7 +64,7 @@ public class ShopService implements AbstractShopService {
      * @throws NoDataFoundException
      */
     @Override
-    public ShopDto getByIdEntity(String idEntity) throws NoDataFoundException {
+    public ShopDto getByIdEntity(Long idEntity) throws NoDataFoundException {
         Shop shop=shopRepository.getOne(idEntity);
         if(shop==null){
             throw new NoDataFoundException("User identified"+idEntity+" by not exist");
@@ -94,7 +94,7 @@ public class ShopService implements AbstractShopService {
      * @throws NoDataFoundException
      */
     @Override
-    public boolean updateEntity(String idEntity, Shop shop) throws NoDataFoundException {
+    public boolean updateEntity(Long idEntity, Shop shop) throws NoDataFoundException {
         Shop sh=shopRepository.getOne(idEntity);
         if(sh==null)
             throw new NoDataFoundException("No Shop was identified by "+idEntity);
@@ -108,7 +108,7 @@ public class ShopService implements AbstractShopService {
      * @return
      */
     @Override
-    public boolean deleteEntity(String idEntity) throws NoDataFoundException {
+    public boolean deleteEntity(Long idEntity) throws NoDataFoundException {
         boolean success=false;
         if(shopRepository.getOne(idEntity)==null)
             throw new NoDataFoundException("No Shop was identified by "+idEntity);

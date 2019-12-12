@@ -16,8 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyObject;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 
@@ -28,7 +27,7 @@ public class ShopControllerTest {
     @Mock
     private AbstractShopService shopService;
 
-    final String shopName="shop_1";
+    final long idShop=1l;
     ShopDto shopDto;
     Shop shop;
     List<ShopDto> shops;
@@ -86,8 +85,8 @@ public class ShopControllerTest {
      */
     @Test
     public void whenGetShop() throws NoDataFoundException {
-    when(shopService.getByIdEntity(anyString())).thenReturn(shopDto);
-     ShopDto sh=shopController.getShop("shop_1");
+    when(shopService.getByIdEntity(anyLong())).thenReturn(shopDto);
+     ShopDto sh=shopController.getShop(1l);
      assertNotNull(sh);
      assertEquals(shopDto.getName(),sh.getName());
     }
@@ -98,10 +97,10 @@ public class ShopControllerTest {
      */
     @Test
     final void testGetShopByNameThrowingException() throws NoDataFoundException {
-        when(shopService.getByIdEntity(anyString())).thenThrow();
+        when(shopService.getByIdEntity(anyLong())).thenThrow();
         assertThrows(Exception.class,
                 ()->{
-                    shopController.getShop(shopName);
+                    shopController.getShop(idShop);
                 }
         );
     }
@@ -138,8 +137,8 @@ public class ShopControllerTest {
      */
     @Test
     public void  whenUpdateShop() throws Exception {
-        when(shopService.updateEntity(anyString(),anyObject())).thenReturn(true);
-        boolean done=shopController.updateShop(shopName,shop);
+        when(shopService.updateEntity(anyLong(),anyObject())).thenReturn(true);
+        boolean done=shopController.updateShop(idShop,shop);
         assertEquals(done,true);
     }
 
@@ -149,10 +148,10 @@ public class ShopControllerTest {
      */
     @Test
     final void testUpdateShopThrowingException() throws NoDataFoundException {
-        when(shopService.updateEntity(anyString(),anyObject())).thenThrow();
+        when(shopService.updateEntity(anyLong(),anyObject())).thenThrow();
         assertThrows(Exception.class,
                 ()->{
-                    shopController.updateShop(shopName,shop);
+                    shopController.updateShop(idShop,shop);
                 }
         );
     }
@@ -163,8 +162,8 @@ public class ShopControllerTest {
      */
     @Test
     public void whenDeleteShop() throws NoDataFoundException {
-        when(shopService.deleteEntity(anyString())).thenReturn(true);
-        boolean done=shopController.deleteShop(shopName);
+        when(shopService.deleteEntity(anyLong())).thenReturn(true);
+        boolean done=shopController.deleteShop(idShop);
         assertEquals(done,true);
     }
 
@@ -174,10 +173,10 @@ public class ShopControllerTest {
      */
     @Test
     final void testDeleteShopThrowingException() throws NoDataFoundException {
-        when(shopService.deleteEntity(anyString())).thenThrow();
+        when(shopService.deleteEntity(anyLong())).thenThrow();
         assertThrows(Exception.class,
                 ()->{
-                    shopController.deleteShop(shopName);
+                    shopController.deleteShop(idShop);
                 }
         );
     }

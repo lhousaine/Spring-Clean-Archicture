@@ -1,5 +1,6 @@
 package com.remote.united_shop.Core.Security;
 
+import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
 import com.remote.united_shop.data.entities.AppUser;
 import com.remote.united_shop.services.AbstractService.AbstractUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
      */
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        AppUser appUser =userService.loadUserByEmail(email);
+        AppUser appUser = null;
+        try {
+            appUser = userService.loadUserByEmail(email);
+        } catch (NoDataFoundException e) {
+            e.printStackTrace();
+        }
         if(appUser ==null) throw new UsernameNotFoundException("invalid user");
         Collection<GrantedAuthority> authorities=new ArrayList<>();
         appUser.getRoles().forEach(r->{

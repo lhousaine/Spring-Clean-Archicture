@@ -1,6 +1,7 @@
 package com.remote.united_shop.web.controllers;
 
 import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
+import com.remote.united_shop.data.dto.ShopDto;
 import com.remote.united_shop.data.dto.UserDto;
 import com.remote.united_shop.data.entities.Address;
 import com.remote.united_shop.data.entities.Coordinates;
@@ -31,10 +32,12 @@ public class AppUserControllerTest {
 
     long idUser=1;
     String shopName="shop_1";
+    String email="em@gmail.com";
     Map<String,String> datas;
     UserDto userDto;
     AppUser appUser;
     List<UserDto> userDtos;
+    ShopDto shopDto;
 
     /***
      *
@@ -43,8 +46,8 @@ public class AppUserControllerTest {
     @BeforeEach
     void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
-        datas=new HashMap<String,String>();
-        datas.put("idUser",idUser+"");
+        datas=new HashMap<String, String>();
+        datas.put("email",email);
         datas.put("shopName",shopName);
         userDto=new UserDto();
         userDto.setFirstName("lhoussaine");
@@ -62,6 +65,13 @@ public class AppUserControllerTest {
         appUser.setEmail("em@gmail.com");
         appUser.setAddress(new Address("123","rue 20","marrakech","maroc"));
         appUser.setCoordinates(new Coordinates(10.1,20.3));
+        shopDto=new ShopDto();
+        shopDto.setName("shop_1");
+        shopDto.setDescription("shop 1 shop 1");
+        shopDto.setLogo("https://shop 1");
+        shopDto.setCoordinates(new Coordinates(10,20));
+        shopDto.setAddress(new Address("123","rue 20","marrakech","maroc"));
+
     }
 
     @Test
@@ -193,10 +203,10 @@ public class AppUserControllerTest {
      */
     @Test
     public void whenLikeNewShop() throws NoDataFoundException {
-        when(userService.likeNewShop(anyLong(),anyString())).thenReturn(true);
-        boolean done=userController.userLikeNewShop(datas);
-        verify(userService).likeNewShop(idUser,shopName);
-        assertEquals(done,true);
+        when(userService.likeNewShop(anyString(),anyString())).thenReturn(shopDto);
+        ShopDto shd=userController.userLikeNewShop(datas);
+        verify(userService).likeNewShop(email,shopName);
+        assertEquals(shd.getName(),shopDto.getName());
     }
 
     /***
@@ -205,7 +215,7 @@ public class AppUserControllerTest {
      */
     @Test
     final void testLikeNewShopThrowingException() throws NoDataFoundException {
-        when(userService.likeNewShop(anyLong(),anyString())).thenThrow();
+        when(userService.likeNewShop(anyString(),anyString())).thenThrow();
         assertThrows(Exception.class,
                 ()->{
                     userController.userLikeNewShop(datas);
@@ -219,10 +229,10 @@ public class AppUserControllerTest {
      */
     @Test
     public void whenDislikeNewShop() throws NoDataFoundException {
-        when(userService.dislikeNewShop(anyLong(),anyString())).thenReturn(true);
-        boolean done=userController.userDislikeShop(datas);
-        verify(userService).dislikeNewShop(idUser,shopName);
-        assertEquals(done,true);
+        when(userService.dislikeNewShop(anyString(),anyString())).thenReturn(shopDto);
+        ShopDto shd=userController.userDislikeShop(datas);
+        verify(userService).dislikeNewShop(email,shopName);
+        assertEquals(shd.getName(),shopDto.getName());
     }
 
     /***
@@ -231,7 +241,7 @@ public class AppUserControllerTest {
      */
     @Test
     final void testDislikeNewShopThrowingException() throws NoDataFoundException {
-        when(userService.dislikeNewShop(anyLong(),anyString())).thenThrow();
+        when(userService.dislikeNewShop(anyString(),anyString())).thenThrow();
         assertThrows(Exception.class,
                 ()->{
                     userController.userDislikeShop(datas);
@@ -245,10 +255,10 @@ public class AppUserControllerTest {
      */
     @Test
     public void whenRemoveLikedShop() throws NoDataFoundException {
-        when(userService.removeShopFromPreferredShops(anyLong(),anyString())).thenReturn(true);
-        boolean done=userController.userRemoveLikedShop(datas);
-        verify(userService).removeShopFromPreferredShops(idUser,shopName);
-        assertEquals(done,true);
+        when(userService.removeShopFromPreferredShops(anyString(),anyString())).thenReturn(shopDto);
+        ShopDto shd=userController.userRemoveLikedShop(datas);
+        verify(userService).removeShopFromPreferredShops(email,shopName);
+        assertEquals(shopDto.getName(),shd.getName());
     }
 
     /***
@@ -257,7 +267,7 @@ public class AppUserControllerTest {
      */
     @Test
     final void testRemoveLikedShopThrowingException() throws NoDataFoundException {
-        when(userService.removeShopFromPreferredShops(anyLong(),anyString())).thenThrow();
+        when(userService.removeShopFromPreferredShops(anyString(),anyString())).thenThrow();
         assertThrows(Exception.class,
                 ()->{
                     userController.userRemoveLikedShop(datas);

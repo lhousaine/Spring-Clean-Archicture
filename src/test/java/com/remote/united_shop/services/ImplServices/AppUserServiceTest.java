@@ -108,13 +108,14 @@ public class AppUserServiceTest {
      *
      */
     @Test
-    public void whenLoadUserByEmail() {
+    public void whenLoadUserByEmail() throws NoDataFoundException {
         when(userRepository.findUserByEmail(anyString())).thenReturn(appUser);
         AppUser us=userService.loadUserByEmail(email);
         verify(userRepository).findUserByEmail(email);
         assertNotNull(us);
         assertEquals(email,us.getEmail());
     }
+
     @Test
     public void addRoleToUser() {
         when(userRepository.findUserByEmail(anyString())).thenReturn(appUser);
@@ -128,6 +129,7 @@ public class AppUserServiceTest {
      *
      * @throws Exception
      */
+
     @Test
     public void whenCreateUser() throws Exception {
         when(userRepository.save(anyObject())).thenReturn(appUser);

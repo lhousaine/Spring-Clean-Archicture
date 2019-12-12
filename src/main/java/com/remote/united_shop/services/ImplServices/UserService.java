@@ -1,7 +1,9 @@
 package com.remote.united_shop.services.ImplServices;
 
 import com.remote.united_shop.Core.Converters.AbstractConverters.AbstractUserConverter;
+import com.remote.united_shop.Core.Converters.ImplConverters.ShopConverter;
 import com.remote.united_shop.Core.Exceptions.NoDataFoundException;
+import com.remote.united_shop.data.dto.ShopDto;
 import com.remote.united_shop.data.dto.UserDto;
 import com.remote.united_shop.data.entities.AppUser;
 import com.remote.united_shop.data.entities.Role;
@@ -10,13 +12,13 @@ import com.remote.united_shop.data.repositories.RoleRepository;
 import com.remote.united_shop.data.repositories.ShopRepository;
 import com.remote.united_shop.data.repositories.UserRepository;
 import com.remote.united_shop.services.AbstractService.AbstractUserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -26,24 +28,24 @@ public class UserService implements AbstractUserService {
     private final ShopRepository shopRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
     private final RoleRepository roleRepository;
-
+    private final ShopConverter shopConverter;
     /***
-     *
      * @param userRepository
      * @param userConverter
      * @param shopRepository
      * @param bCryptPasswordEncoder
      * @param roleRepository
+     * @param shopConverter
      */
 
-    public UserService(UserRepository userRepository, @Qualifier("UserConverter") AbstractUserConverter userConverter, ShopRepository shopRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository) {
+    public UserService(UserRepository userRepository, @Qualifier("UserConverter") AbstractUserConverter userConverter, ShopRepository shopRepository, BCryptPasswordEncoder bCryptPasswordEncoder, RoleRepository roleRepository, ShopConverter shopConverter) {
         this.userRepository = userRepository;
         this.userConverter = userConverter;
         this.shopRepository = shopRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
         this.roleRepository = roleRepository;
+        this.shopConverter = shopConverter;
     }
-
     /**
      *
      * @return
@@ -74,10 +76,24 @@ public class UserService implements AbstractUserService {
      * @return
      */
     @Override
-    public AppUser loadUserByEmail(String email) {
-        return userRepository.findUserByEmail(email);
+    public AppUser loadUserByEmail(String email) throws NoDataFoundException {
+        AppUser us=userRepository.findUserByEmail(email);
+        if (us==null)
+            throw new NoDataFoundException("User identify by "+email+" Not Exit");
+        return us;
     }
-
+    /***
+     *
+     * @param email
+     * @return
+     */
+    @Override
+    public UserDto findUserByEmail(String email) throws NoDataFoundException {
+        AppUser us=userRepository.findUserByEmail(email);
+        if (us==null)
+            throw new NoDataFoundException("User identify by "+email+" Not Exit");
+        return userConverter.convertToDto(us);
+    }
     /**
      *
      * @param appUser
@@ -143,62 +159,74 @@ public class UserService implements AbstractUserService {
 
     /***
      *
-     * @param idUser
+     * @param email
      * @param shopName
      * @return
      * @throws NoDataFoundException
      */
     @Override
-    public boolean likeNewShop(long idUser,String shopName) throws NoDataFoundException {
-        return this.likeDislikeShops(idUser,shopName,"likeNewShop");
+    public ShopDto likeNewShop(String email, String shopName) throws Exception {
+        return this.likeDislikeShops(email,shopName,"likeNewShop");
     }
 
     /***
      *
-     * @param idUser
+     * @param email
      * @param shopName
      * @return
      * @throws NoDataFoundException
      */
     @Override
-    public boolean dislikeNewShop(long idUser,String shopName) throws NoDataFoundException {
-        return this.likeDislikeShops(idUser,shopName,"disLikeNewShop");
+    public ShopDto dislikeNewShop(String email, String shopName) throws Exception {
+        return this.likeDislikeShops(email,shopName,"disLikeNewShop");
     }
 
     /***
      *
-     * @param idUser
+     * @param email
      * @param shopName
      * @return
      * @throws NoDataFoundException
      */
     @Override
-    public boolean removeShopFromPreferredShops(long idUser,String shopName) throws NoDataFoundException {
-        return this.likeDislikeShops(idUser,shopName,"removeLikedShop");
+    public ShopDto removeShopFromPreferredShops(String email,String shopName) throws Exception {
+        return this.likeDislikeShops(email,shopName,"removeLikedShop");
+    }
+
+    @Override
+    public List<ShopDto> preferredShopsToUser(String email) throws NoDataFoundException {
+        AppUser appUser =userRepository.findUserByEmail(email);
+        return shopConverter.convertListToListDto(appUser.getLikedShops());
     }
 
     /***
      *
-     * @param idUser
+     * @param email
      * @param shopName
      * @param operation
      * @return
      * @throws NoDataFoundException
      */
-    public boolean likeDislikeShops(long idUser,String shopName,String operation) throws NoDataFoundException {
-        AppUser appUser =userRepository.getOne(idUser);
+    public ShopDto likeDislikeShops(String email, String shopName, String operation) throws Exception {
+        AppUser appUser =userRepository.findUserByEmail(email);
         if (appUser ==null)
-            throw new NoDataFoundException("User identified by "+idUser+" Not exist");
-        Shop shop=shopRepository.getOne(shopName);
+            throw new NoDataFoundException("User identified by "+email+" Not exist");
+        Shop shop=shopRepository.findShopByName(shopName);
         if (shop==null)
             throw new NoDataFoundException("Shop identified by "+shopName+" Not exist");
         switch (operation){
-            case "likeNewShop":
+            case "likeNewShop": {
+                if(appUser.getLikedShops().contains(shop))
+                    throw new Exception("Already Liked Schop");
                 appUser.addNewLikedShod(shop);
                 break;
-            case "disLikeNewShop":
+            }
+            case "disLikeNewShop": {
+                if(appUser.getLikedShops().contains(shop))
+                    throw new Exception("Already Liked Schop");
                 appUser.addNewDislikedShop(shop);
                 break;
+            }
             case "removeLikedShop":
                 appUser.removeLikedShop(shop);
                 break;
@@ -206,6 +234,6 @@ public class UserService implements AbstractUserService {
                 break;
         }
         AppUser us=userRepository.save(appUser);
-        return us != null;
+        return shopConverter.convertToDto(shop);
     }
 }

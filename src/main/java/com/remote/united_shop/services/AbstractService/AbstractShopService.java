@@ -7,6 +7,6 @@ import com.remote.united_shop.data.entities.Shop;
 
 import java.util.List;
 
-public interface AbstractShopService extends AbstractService<Shop,String, ShopDto>{
+public interface AbstractShopService extends AbstractService<Shop,Long, ShopDto>{
     public List<ShopDto> nearbyShopsToUser(Coordinates coordinates) throws NoDataFoundException;
 }

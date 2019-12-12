@@ -46,13 +46,13 @@ public class ShopController {
 
     /**
      *
-     * @param name
+     * @param idShop
      * @return
      * @throws NoDataFoundException
      */
-    @GetMapping(path = "/{name}",produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ShopDto getShop(@PathVariable String name) throws NoDataFoundException {
-        return shopService.getByIdEntity(name);
+    @GetMapping(path = "/{idShop}",produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ShopDto getShop(@PathVariable long idShop) throws NoDataFoundException {
+        return shopService.getByIdEntity(idShop);
     }
 
     /***
@@ -69,23 +69,23 @@ public class ShopController {
 
     /**
      *
-     * @param name
+     * @param idShop
      * @param shop
      * @return
      * @throws NoDataFoundException
      */
-    @PatchMapping(path = "/{name}")
-    public boolean updateShop(@PathVariable String name,@RequestBody Shop shop) throws NoDataFoundException {
-        return shopService.updateEntity(name,shop);
+    @PatchMapping(path = "/{idShop}")
+    public boolean updateShop(@PathVariable long idShop,@RequestBody Shop shop) throws NoDataFoundException {
+        return shopService.updateEntity(idShop,shop);
     }
 
     /**
      *
-     * @param name
+     * @param idShop
      * @return
      */
-    @DeleteMapping("/{name}")
-    public boolean deleteShop(@PathVariable String name) throws NoDataFoundException {
-        return shopService.deleteEntity(name);
+    @DeleteMapping("/{idShop}")
+    public boolean deleteShop(@PathVariable long idShop) throws NoDataFoundException {
+        return shopService.deleteEntity(idShop);
     }
 }

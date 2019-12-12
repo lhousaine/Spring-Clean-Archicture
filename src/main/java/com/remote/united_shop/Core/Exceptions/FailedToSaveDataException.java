@@ -9,7 +9,6 @@ public class FailedToSaveDataException extends Exception {
     public FailedToSaveDataException(String message, Throwable cause) {
         super(message, cause);
     }
-
     /***
      *
      * @param message

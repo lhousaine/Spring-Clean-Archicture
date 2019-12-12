@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface ShopRepository extends JpaRepository<Shop,String> {
+public interface ShopRepository extends JpaRepository<Shop,Long> {
     public List<Shop> findByAddress_City(String city);
     public Shop findShopByName(String name);
 }

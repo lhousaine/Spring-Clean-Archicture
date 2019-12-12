@@ -72,9 +72,9 @@ public class ShopServiceTest {
      */
     @Test
     final void testGetByIdShop() throws NoDataFoundException {
-        when(shopRepository.getOne("shop_1")).thenReturn(shop);
-        ShopDto sh=shopService.getByIdEntity("shop_1");
-        verify(shopRepository).getOne("shop_1");
+        when(shopRepository.getOne(1l)).thenReturn(shop);
+        ShopDto sh=shopService.getByIdEntity(1l);
+        verify(shopRepository).getOne(1l);
         verify(abstractShopConverter).convertToDto(shop);
         assertNotNull(sh);
         assertEquals("shop_1",sh.getName());
@@ -85,10 +85,10 @@ public class ShopServiceTest {
      */
     @Test
     final void testGetByIdShopThrowingException()  {
-        when(shopRepository.getOne(anyString())).thenReturn(null);
+        when(shopRepository.getOne(anyLong())).thenReturn(null);
         assertThrows(Exception.class,
                 ()->{
-                    shopService.getByIdEntity("shop_1");
+                    shopService.getByIdEntity(1l);
                 }
         );
     }
@@ -156,10 +156,10 @@ public class ShopServiceTest {
      */
     @Test
     public void  whenUpdateShop() throws Exception {
-        when(shopRepository.getOne(anyString())).thenReturn(shop);
+        when(shopRepository.getOne(anyLong())).thenReturn(shop);
         when(shopRepository.save(anyObject())).thenReturn(shop);
-        boolean done=shopService.updateEntity(shopName,shop);
-        verify(shopRepository).getOne(shopName);
+        boolean done=shopService.updateEntity(1l,shop);
+        verify(shopRepository).getOne(1l);
         verify(shopRepository).save(shop);
         assertEquals(done,true);
     }
@@ -173,7 +173,7 @@ public class ShopServiceTest {
         when(abstractShopConverter.convertToDto(shop)).thenReturn(null);
         assertThrows(Exception.class,
                 ()->{
-                    shopService.updateEntity(shopName,shop);
+                    shopService.updateEntity(1l,shop);
                 }
         );
     }
@@ -184,9 +184,9 @@ public class ShopServiceTest {
      */
     @Test
     public void whenDeleteShop() throws NoDataFoundException {
-        when(shopRepository.getOne(shopName)).thenReturn(shop);
-        boolean done=shopService.deleteEntity(shopName);
-        verify(shopRepository).deleteById(shopName);
+        when(shopRepository.getOne(1l)).thenReturn(shop);
+        boolean done=shopService.deleteEntity(1l);
+        verify(shopRepository).deleteById(1l);
         assertEquals(done,true);
     }
 
@@ -195,10 +195,10 @@ public class ShopServiceTest {
      */
     @Test
     final void testDeleteShopThrowingException()  {
-        when(shopRepository.getOne(shopName)).thenReturn(null);
+        when(shopRepository.getOne(1l)).thenReturn(null);
         assertThrows(Exception.class,
                 ()->{
-                    shopService.deleteEntity(shopName);
+                    shopService.deleteEntity(1l);
                 }
         );
     }

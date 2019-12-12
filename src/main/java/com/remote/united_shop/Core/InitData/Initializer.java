@@ -40,7 +40,7 @@ public class Initializer {
         Role r2=roleRepository.save(new Role("ADMIN"));
         Shop shop1=new Shop();
         shop1.setName("shop_1");
-        shop1.setDescription(" Maecenas nec odio et ante tincidunt tempus. Donec vitae sapien ut libero \" +\n" +
+        shop1.setDescription("tincidunt tempus. Donec vitae sapien ut libero \" +\n" +
                 "                \"venenatis faucibus. Nullam quis ante.");
         shop1.setLogo("https://i.ibb.co/R9sc5vD/shop-1.jpg");
         shop1.setCoordinates(new Coordinates(32.5,8));
